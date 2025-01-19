@@ -15,7 +15,7 @@ public class NFCManager {
     private static final String TAG = NFCManager.class.getSimpleName();
 
     // Enable NFC Reader Mode
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT) //makes sure that method can only be used on devices running at least a specific API level
     public static void enableReaderMode(Context context, Activity activity, NfcAdapter.ReaderCallback callback, int flags, Bundle extras) {
         try {
             NfcAdapter.getDefaultAdapter(context).enableReaderMode(activity, callback, flags, extras);

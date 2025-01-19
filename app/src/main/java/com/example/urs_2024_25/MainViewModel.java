@@ -67,6 +67,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public LiveData<String> observeNFCState() {
+        Log.d(String.valueOf(liveNFCState), "state:" );
         return liveNFCState;
     }
     //endregion

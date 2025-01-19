@@ -6,14 +6,11 @@ import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,8 +21,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    private TextView mTextViewExplanation, mTextViewStatus;
+    private TextView mTextViewExplanation, mTextViewStatus; // UI components for displaying information about NFC tags and the app's NFC status.
     private MainViewModel viewModel;
     private NfcAdapter nfcAdapter;
 
@@ -55,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel.observeNFCState().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String nfcStatus) {
-                mTextViewStatus.setText(nfcStatus);
+                mTextViewStatus.setText(nfcStatus); //update of text displaying the state
             }
         });
     }
