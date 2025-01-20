@@ -5,27 +5,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
 
+    <!-- Explanation TextView -->
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_view_explanation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start"
         android:hint="@string/app_name"
-        android:textAlignment="textStart"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Status TextView -->
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_view_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start"
         android:textAlignment="textStart"
+        app:layout_constraintTop_toBottomOf="@id/button_list_students"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- List Students Button -->
+    <Button
+        android:id="@+id/button_list_students"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List Students"
+        app:layout_constraintTop_toBottomOf="@id/text_view_explanation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
