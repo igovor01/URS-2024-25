@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,6 +75,15 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "NFC is not supported on this device.");
             mTextViewStatus.setText("NFC not supported");
         }
+
+        Button buttonListStudents = findViewById(R.id.button_list_students); // Replace with the correct ID from XML
+        buttonListStudents.setClickable(true); // Ensure button is clickable
+        buttonListStudents.setOnClickListener(v -> {
+            Log.d(TAG, "Button clicked!");
+            Intent intent = new Intent(MainActivity.this, ListedStudents.class);
+            startActivity(intent);
+        });
+
     }
 
     @Override
