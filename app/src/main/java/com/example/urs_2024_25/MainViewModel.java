@@ -25,14 +25,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.urs_2024_25.NFCManager;
-import com.example.urs_2024_25.NFCStatus;
-
 import java.math.BigInteger;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 
 public class MainViewModel extends AndroidViewModel {
 
@@ -104,7 +98,8 @@ public class MainViewModel extends AndroidViewModel {
         return new IntentFilter[]{filter};
     }
 
-    public String dumpTagData(final Parcelable parcelable) { Log.d(TAG,"dumpTagData(" + parcelable + ")");
+    public String dumpTagData(final Parcelable parcelable) {
+        Log.d(TAG,"dumpTagData(" + parcelable + ")");
         StringBuilder sb = new StringBuilder();
         Tag tag = (Tag) parcelable;
         byte[] id = tag.getId();
@@ -193,12 +188,13 @@ public class MainViewModel extends AndroidViewModel {
         return "NFC Tag\n" + ByteArrayToHexString(inarray);
     }
 
-    public String getDateTimeNow(final String data) { Log.d(TAG,"getDateTime(" + data + ")");
+    /*public String getDateTimeNow(final String data) {
+        Log.d(TAG,"getDateTime(" + data + ")");
         DateFormat TIME_FORMAT = SimpleDateFormat.getDateTimeInstance();
         Date now = new Date();
         Log.d(ContentValues.TAG,"getDateTimeNow() Return \n" + TIME_FORMAT.format(now) + '\n' + data);
         return TIME_FORMAT.format(now) + '\n' + data;
-    }
+    }*/
 
     private String getHex(final byte[] bytes) { Log.d(TAG,"getHex()");
         StringBuilder sb = new StringBuilder();
@@ -214,7 +210,8 @@ public class MainViewModel extends AndroidViewModel {
         return sb.toString();
     }
 
-    private long getDec(final byte[] bytes) { Log.d(TAG,"getDec()");
+    private long getDec(final byte[] bytes) {
+        Log.d(TAG,"getDec()");
         long result = 0;
         long factor = 1;
         for (int i = 0; i < bytes.length; ++i) {

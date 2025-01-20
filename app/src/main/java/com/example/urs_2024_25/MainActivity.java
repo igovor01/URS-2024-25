@@ -1,11 +1,12 @@
 package com.example.urs_2024_25;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -16,15 +17,18 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private TextView mTextViewExplanation, mTextViewStatus; // UI components for displaying information about NFC tags and the app's NFC status.
+    private TextView mTextViewExplanation, mTextViewStatus;
     private MainViewModel viewModel;
     private NfcAdapter nfcAdapter;
 
+    //onCreate() → onStart() → onResume() -> first launch
+    //onResume() is always paired with onPause()
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,28 +36,44 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // Initialize views
-        mTextViewExplanation = findViewById(R.id.text_view_explanation);
-        mTextViewStatus = findViewById(R.id.text_view_status);
-
-        // Initialize ViewModel
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        // Initialize Views and ViewModel
+        initViews();
+        initViewModel();
 
         // Initialize NFC adapter
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (nfcAdapter == null) {
-            Log.e(TAG, "NFC is not supported on this device.");
-            mTextViewStatus.setText("NFC not supported");
-            return;
-        }
+        initNfcAdapter();
 
         // Observe NFC state changes
         viewModel.observeNFCState().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String nfcStatus) {
-                mTextViewStatus.setText(nfcStatus); //update of text displaying the state
+                Log.e(nfcStatus, "nfcStatus check");
+                mTextViewStatus.setText(nfcStatus); // update of text displaying the state
             }
         });
+    }
+
+    private void initViews() {
+        mTextViewExplanation = findViewById(R.id.text_view_explanation);
+        mTextViewStatus = findViewById(R.id.text_view_status);
+    }
+
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel.observeNFCState().observe(this, this::updateNfcStatus);
+    }
+
+    private void updateNfcStatus(String nfcStatus) {
+        Log.e(TAG, "NFC Status: " + nfcStatus);
+        mTextViewStatus.setText(nfcStatus);
+    }
+
+    private void initNfcAdapter() {
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (nfcAdapter == null) {
+            Log.e(TAG, "NFC is not supported on this device.");
+            mTextViewStatus.setText("NFC not supported");
+        }
     }
 
     @Override
@@ -63,10 +83,17 @@ public class MainActivity extends AppCompatActivity {
 
         if (nfcAdapter == null) return;
 
-        // Check and update NFC status
+        // Check NFC status and enable foreground dispatch
         viewModel.checkNFCStatus();
+        enableForegroundDispatch();
 
-        // Enable foreground dispatch for NFC
+        // Handle NFC intent if available
+        if (getIntent() != null) {
+            onNewIntent(getIntent());
+        }
+    }
+
+    private void enableForegroundDispatch() {
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
                 0,
@@ -74,11 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 PendingIntent.FLAG_MUTABLE
         );
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, viewModel.getIntentFilter(), viewModel.techList);
-
-        // Handle NFC intent if available
-        if (getIntent() != null) {
-            onNewIntent(getIntent());
-        }
     }
 
     @Override
@@ -103,40 +125,65 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        handleNfcTag(intent);
+        handleNdefMessages(intent);
+    }
+
+    private void handleNfcTag(Intent intent) {
         String action = intent.getAction();
-        Log.d(ContentValues.TAG, "Intent Action: " + action);
+        Log.d(TAG, "Intent Action: " + action);
 
         if (!viewModel.isTagDiscovered(action)) {
-            Log.d(ContentValues.TAG, "Tag not discovered.");
+            Log.d(TAG, "Tag not discovered.");
             return;
         }
 
-        // Process the NFC tag
         Parcelable tagN = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         if (tagN != null) {
-            Log.d(ContentValues.TAG, "Tag detected.");
-
-            byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
-            String tagIdHex = viewModel.getByteArrayToHexString(id);
-
-            mTextViewExplanation.setText(tagIdHex);
-            viewModel.setNFC(NFCStatus.Read);
-
-            String tagData = viewModel.dumpTagData(tagN);
-            String formattedData = viewModel.getDateTimeNow(tagData);
-            mTextViewExplanation.setText(formattedData);
-
-            createNdefMessage(tagData, id);
+            processTagData(tagN, intent);
         } else {
-            Log.d(ContentValues.TAG, "No tag found in intent.");
+            Log.d(TAG, "No tag found in intent.");
         }
+    }
 
-        // Check for NDEF messages
+    @SuppressLint("SetTextI18n")
+    private void processTagData(Parcelable tagN, Intent intent) {
+        byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
+        String tagIdHex = viewModel.getByteArrayToHexString(id);
+        long tagIdDec = getDec(id);
+
+        mTextViewExplanation.setText(tagIdHex);
+        viewModel.setNFC(NFCStatus.Read);
+
+        String tagData = viewModel.dumpTagData(tagN); //data returned from tag;
+        //String formattedData = viewModel.getDateTimeNow(tagData);
+        //Log.d(TAG, "Formatted Data: " + formattedData);
+        Log.d(TAG, "Decimal id: " + tagIdDec);
+        NfcRecord nfcRecord = new NfcRecord();
+        nfcRecord.setNfcId(tagIdDec);
+        nfcRecord.setTimestamp(getCurrentTimestamp());
+
+        //save nfcRecord to Db -> TODO
+        mTextViewExplanation.setText("Data from tag: \n" + tagData + "\n\nProcessed data: \n"
+                +  "Card ID(dec):" + nfcRecord.getNfcId() + "\nTimeStamp:" + nfcRecord.getTimeStamp());
+
+
+        //createNdefMessage(tagData, id);
+    }
+
+    private LocalDateTime getCurrentTimestamp() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return LocalDateTime.now();
+        }
+        return null;
+    }
+
+    private void handleNdefMessages(Intent intent) {
         Parcelable[] rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
         if (rawMessages != null) {
-            Log.d(ContentValues.TAG, "Found " + rawMessages.length + " NDEF messages.");
+            Log.d(TAG, "Found " + rawMessages.length + " NDEF messages.");
         } else {
-            Log.d(ContentValues.TAG, "No NDEF messages found.");
+            Log.d(TAG, "No NDEF messages found.");
         }
     }
 
@@ -155,5 +202,17 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "Error creating NDEF message: " + e.getMessage(), e);
         }
+    }
+
+    private long getDec(final byte[] bytes) {
+        Log.d(TAG, "getDec()");
+        long result = 0;
+        long factor = 1;
+        for (int i = 0; i < bytes.length; ++i) {
+            long value = bytes[i] & 0xffL;
+            result += value * factor;
+            factor *= 256L;
+        }
+        return result;
     }
 }
