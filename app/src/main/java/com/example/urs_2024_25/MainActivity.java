@@ -12,21 +12,25 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Attendance.AttendanceCallback {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private TextView mTextViewExplanation, mTextViewStatus;
     private MainViewModel viewModel;
     private NfcAdapter nfcAdapter;
+    private Attendance attendance;
+    private static final int DEFAULT_CLASS_ID = 1;
 
     //onCreate() → onStart() → onResume() -> first launch
     //onResume() is always paired with onPause()
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
 
         setContentView(R.layout.activity_main);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        attendance = new Attendance(db, this);
 
         // Initialize Views and ViewModel
         initViews();
@@ -179,6 +185,33 @@ public class MainActivity extends AppCompatActivity {
 
 
         //createNdefMessage(tagData, id);
+        attendance.recordAttendance(DEFAULT_CLASS_ID, (int)tagIdDec);
+    }
+
+    // AttendanceCallback implementation
+    @Override
+    public void onSuccess(String message) {
+        runOnUiThread(() -> {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            // Optionally load and display updated attendance data
+            attendance.loadAttendanceData();
+        });
+    }
+
+    @Override
+    public void onError(String message) {
+        runOnUiThread(() -> {
+            Toast.makeText(this, "Error: " + message, Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Attendance error: " + message);
+        });
+    }
+
+    @Override
+    public void onDataLoaded(String data) {
+        runOnUiThread(() -> {
+            // You can update a TextView or other UI element to show the attendance data
+            mTextViewExplanation.setText(data);
+        });
     }
 
     private LocalDateTime getCurrentTimestamp() {
