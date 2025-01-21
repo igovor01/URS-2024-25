@@ -38,12 +38,14 @@ public class LitAdapter extends ArrayAdapter<ListData> {
         //findViewById()- to locate the UI elements in the list_students layout
         ImageView listImage = view.findViewById(R.id.listImage);
         TextView listName = view.findViewById(R.id.listName);
-        TextView listTime = view.findViewById(R.id.listTime);
+        TextView listSurname = view.findViewById(R.id.listSurname);
+        //TextView listTime = view.findViewById(R.id.listTime);
 
         //fill the image and text with the current student’s data
         listImage.setImageResource(listData.image);
         listName.setText(listData.name);
-        listTime.setText(listData.time);
+        listSurname.setText(listData.surname);
+        //listTime.setText(listData.time);
 
         return view;
     }

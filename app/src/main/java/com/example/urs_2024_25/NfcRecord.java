@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 
 public class NfcRecord {
     private long nfcId;
-    private LocalDateTime timestamp;
+    private String timestamp;
 
     public void setNfcId(long nfcId) {
         this.nfcId = nfcId;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -18,7 +18,7 @@ public class NfcRecord {
         return this.nfcId;
     }
 
-    public LocalDateTime getTimeStamp() {
+    public String getTimeStamp() {
         return this.timestamp;
     }
 }
