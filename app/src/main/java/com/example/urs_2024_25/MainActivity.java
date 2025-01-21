@@ -175,14 +175,13 @@ public class MainActivity extends AppCompatActivity implements Attendance.Attend
         //String formattedData = viewModel.getDateTimeNow(tagData);
         //Log.d(TAG, "Formatted Data: " + formattedData);
         Log.d(TAG, "Decimal id: " + tagIdDec);
-        NfcRecord nfcRecord = new NfcRecord();
-        nfcRecord.setNfcId(tagIdDec);
-        nfcRecord.setTimestamp(getCurrentTimestamp());
+        //NfcRecord nfcRecord = new NfcRecord();
+        //nfcRecord.setNfcId(tagIdDec);
+        //nfcRecord.setTimestamp(getCurrentTimestamp());
 
         //save nfcRecord to Db -> TODO
-        mTextViewExplanation.setText("Data from tag: \n" + tagData + "\n\nProcessed data: \n"
-                +  "Card ID(dec):" + nfcRecord.getNfcId() + "\nTimeStamp:" + nfcRecord.getTimeStamp());
-
+        //mTextViewExplanation.setText("Data from tag: \n" + tagData + "\n\nProcessed data: \n"
+        //        +  "Card ID(dec):" + nfcRecord.getNfcId() + "\nTimeStamp:" + nfcRecord.getTimeStamp());
 
         //createNdefMessage(tagData, id);
         attendance.recordAttendance(DEFAULT_CLASS_ID, (int)tagIdDec);

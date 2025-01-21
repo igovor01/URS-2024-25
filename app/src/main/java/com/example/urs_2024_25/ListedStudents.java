@@ -1,39 +1,54 @@
-//pripremi podatke od kojih ce
-//za svakog studenta kreirat listData objekt,
-//te listData objekte salje ListAdapteru i onda listAdapter prikaze te podatke
 package com.example.urs_2024_25;
 
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.Toast;
+import android.util.Log;
 
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListedStudents extends AppCompatActivity {
-    //list that holds student information (
+    // List that holds student information
     ArrayList<ListData> dataArrayList = new ArrayList<>();
-    //LitAdapter that connects the data to the ListView
+    // LitAdapter that connects the data to the ListView
     LitAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.listed_students); //screen uses the listed_students.xml file to define its design
+        setContentView(R.layout.listed_students); // Screen uses the listed_students.xml file to define its design
 
         ListView listView = findViewById(R.id.listview);
 
-        int[] imageList = {R.drawable.profile};//everyone has same profile image
-        String[] nameList = {"Ime1", "Ime2", "Ime3"};
-        String[] timeList = {"2025-01-20 14:47", "2025-01-20 14:48", "2025-01-20 14:49"};
+        Users users = new Users();
+        users.loadStudentsBasedOnAttendance(new Users.DataCallback() {
+            @Override
+            public void onDataLoaded(List<UserModel> usersData) {
+                if(usersData.isEmpty()) {
+                    Toast.makeText(ListedStudents.this, "0 students attended this class!", Toast.LENGTH_SHORT).show();
+                } else {
+                    int imageRes = R.drawable.profile; // Everyone has the same profile image
 
-        for (int i = 0; i < nameList.length; i++) {
-            //ListData object is created with their name, time, and image
-            dataArrayList.add(new ListData(timeList[i], imageList[0], nameList[i]));
-        }
+                    // Populate the dataArrayList
+                    for (UserModel user : usersData) {
+                        dataArrayList.add(new ListData(imageRes, user.getName(), user.getSurname()));
+                    }
 
-        //new LitAdapter is created, connecting the data to the screen
-        listAdapter = new LitAdapter(this, dataArrayList);
-        listView.setAdapter(listAdapter);
+                    // Set up the adapter with the loaded data
+                    listAdapter = new LitAdapter(ListedStudents.this, dataArrayList);
+                    listView.setAdapter(listAdapter);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(ListedStudents.this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        }, 1L);
     }
 }
