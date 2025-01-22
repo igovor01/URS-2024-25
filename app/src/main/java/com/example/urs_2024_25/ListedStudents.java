@@ -36,7 +36,7 @@ public class ListedStudents extends AppCompatActivity {
 
                     // Populate the dataArrayList
                     for (UserModel user : usersData) {
-                        dataArrayList.add(new ListData(imageRes, user.getName(), user.getSurname()));
+                        dataArrayList.add(new ListData(user.getTimeStamp(), imageRes, user.getName(), user.getSurname()));
                     }
 
                     // Set up the adapter with the loaded data

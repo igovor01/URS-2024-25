@@ -117,6 +117,12 @@ public class Users {
                             user.setUserID(document.getLong("userID"));
                             user.setName(document.getString("name"));
                             user.setSurname(document.getString("surname"));
+                            String timeStamp = users.stream()
+                                    .filter(student -> student.getNfcId().equals(document.getLong("userID")))
+                                    .map(NfcRecord::getTimeStamp)
+                                    .findFirst()
+                                    .orElse(null);
+                            user.setTimeStamp(timeStamp);
                             students.add(user);
                         }
 

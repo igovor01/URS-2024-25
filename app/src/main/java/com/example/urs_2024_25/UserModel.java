@@ -5,6 +5,8 @@ public class UserModel {
     private String surname;
     private Long userID;
 
+    private String timeStamp;
+
     public void setName(String name) {
         this.name = name;
     }
@@ -15,6 +17,14 @@ public class UserModel {
 
     public void setUserID(Long userID) {
         this.userID = userID;
+    }
+
+    public void setTimeStamp (String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public String getTimeStamp() {
+        return  this.timeStamp;
     }
 
     public String getName() {
