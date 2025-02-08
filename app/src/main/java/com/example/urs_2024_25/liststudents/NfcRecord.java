@@ -1,6 +1,4 @@
-package com.example.urs_2024_25;
-
-import java.time.LocalDateTime;
+package com.example.urs_2024_25.liststudents;
 
 public class NfcRecord {
     private long nfcId;
