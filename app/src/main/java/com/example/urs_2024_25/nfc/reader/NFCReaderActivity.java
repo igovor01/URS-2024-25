@@ -1,4 +1,4 @@
-package com.example.urs_2024_25;
+package com.example.urs_2024_25.nfc.reader;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.urs_2024_25.Attendance;
+import com.example.urs_2024_25.R;
 import com.example.urs_2024_25.liststudents.ListStudentsActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -25,9 +27,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements Attendance.AttendanceCallback {
+public class NFCReaderActivity extends AppCompatActivity implements Attendance.AttendanceCallback {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = NFCReaderActivity.class.getSimpleName();
     private TextView mTextViewExplanation, mTextViewStatus;
     private MainViewModel viewModel;
     private NfcAdapter nfcAdapter;
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements Attendance.Attend
         buttonListStudents.setClickable(true); // Ensure button is clickable
         buttonListStudents.setOnClickListener(v -> {
             Log.d(TAG, "Button List Students clicked!");
-            startActivity(new Intent(MainActivity.this, ListStudentsActivity.class));
+            startActivity(new Intent(NFCReaderActivity.this, ListStudentsActivity.class));
         });
     }
 
