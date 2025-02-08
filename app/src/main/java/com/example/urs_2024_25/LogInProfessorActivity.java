@@ -15,8 +15,6 @@ import com.example.urs_2024_25.nfc.reader.NFCReaderActivity;
 public class LogInProfessorActivity extends AppCompatActivity {
 
     private EditText loginEmail, loginPassword;
-    private TextView signupRedirectText;
-    private Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +24,8 @@ public class LogInProfessorActivity extends AppCompatActivity {
 
         loginEmail = findViewById(R.id.login_professor_email);
         loginPassword = findViewById(R.id.login_professor_password);
-        signupRedirectText = findViewById(R.id.signup_professor_redirect);
-        loginButton = findViewById(R.id.login_professor_button);
+        TextView signupRedirectText = findViewById(R.id.signup_professor_redirect);
+        Button loginButton = findViewById(R.id.login_professor_button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class LogInStudentActivity extends AppCompatActivity {
 
     private EditText loginEmail, loginPassword;
-    private TextView signupRedirectText;
-    private Button loginButton;
 
 
     @Override
@@ -25,8 +23,8 @@ public class LogInStudentActivity extends AppCompatActivity {
 
         loginEmail = findViewById(R.id.login_student_email);
         loginPassword = findViewById(R.id.login_student_password);
-        signupRedirectText = findViewById(R.id.signup_student_redirect);
-        loginButton = findViewById(R.id.login_student_button);
+        TextView signupRedirectText = findViewById(R.id.signup_student_redirect);
+        Button loginButton = findViewById(R.id.login_student_button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

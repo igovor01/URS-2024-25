@@ -1,6 +1,5 @@
 package com.example.urs_2024_25;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SignUpProfessorActivity extends AppCompatActivity {
 
     private EditText signupEmail, signupPassword;
-    private Button signupButton;
-    private TextView loginRedirectText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +22,8 @@ public class SignUpProfessorActivity extends AppCompatActivity {
 
         signupEmail = findViewById(R.id.signup_professor_email);
         signupPassword = findViewById(R.id.signup_professor_password);
-        signupButton = findViewById(R.id.signup_professor_button);
-        loginRedirectText = findViewById(R.id.login_professor_redirect);
+        Button signupButton = findViewById(R.id.signup_professor_button);
+        TextView loginRedirectText = findViewById(R.id.login_professor_redirect);
 
 
         signupButton.setOnClickListener(new View.OnClickListener() {

@@ -10,15 +10,10 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class SignUpStudentActivity extends AppCompatActivity {
 
     private EditText signupEmail, signupPassword;
-    private Button signupButton;
-    private TextView loginRedirectText;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -29,8 +24,8 @@ public class SignUpStudentActivity extends AppCompatActivity {
 
         signupEmail = findViewById(R.id.signup_student_email);
         signupPassword = findViewById(R.id.signup_student_password);
-        signupButton = findViewById(R.id.signup_student_button);
-        loginRedirectText = findViewById(R.id.login_student_redirect);
+        Button signupButton = findViewById(R.id.signup_student_button);
+        TextView loginRedirectText = findViewById(R.id.login_student_redirect);
 
 
         signupButton.setOnClickListener(new View.OnClickListener() {

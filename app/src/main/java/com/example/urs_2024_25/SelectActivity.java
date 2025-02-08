@@ -10,17 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SelectActivity extends AppCompatActivity {
 
-    private Button studentButton;
-    private Button professorButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_select);
 
-        studentButton = findViewById(R.id.student_button);
-        professorButton = findViewById(R.id.professor_button);
+        Button studentButton = findViewById(R.id.student_button);
+        Button professorButton = findViewById(R.id.professor_button);
 
 
         studentButton.setOnClickListener(new View.OnClickListener() {
