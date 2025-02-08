@@ -35,12 +35,10 @@ public class SignUpProfessorActivity extends AppCompatActivity {
                 String user = signupEmail.getText().toString().trim();
                 String pass = signupPassword.getText().toString().trim();
 
-                if(user.isEmpty())
-                {
+                if (user.isEmpty()) {
                     signupEmail.setError("Email cannot be empty");
                 }
-                if(pass.isEmpty())
-                {
+                if (pass.isEmpty()) {
                     signupPassword.setError("Password cannot be empty");
                 }
             }

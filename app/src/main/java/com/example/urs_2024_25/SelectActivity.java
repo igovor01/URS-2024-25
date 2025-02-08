@@ -26,7 +26,7 @@ public class SelectActivity extends AppCompatActivity {
         studentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SelectActivity.this,LogInStudentActivity.class));
+                startActivity(new Intent(SelectActivity.this, LogInStudentActivity.class));
             }
         });
 

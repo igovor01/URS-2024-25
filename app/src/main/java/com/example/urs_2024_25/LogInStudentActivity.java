@@ -34,11 +34,10 @@ public class LogInStudentActivity extends AppCompatActivity {
                 String email = loginEmail.getText().toString();
                 String pass = loginPassword.getText().toString();
 
-                if(email.isEmpty()) {
+                if (email.isEmpty()) {
                     loginEmail.setError("Email cannot be empty");
                 }
-                if(pass.isEmpty())
-                {
+                if (pass.isEmpty()) {
                     loginPassword.setError("Password cannot be empty");
                 }
             }

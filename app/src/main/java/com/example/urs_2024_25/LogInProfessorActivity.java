@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.urs_2024_25.nfc.reader.NFCReaderActivity;
+
 public class LogInProfessorActivity extends AppCompatActivity {
 
     private EditText loginEmail, loginPassword;
@@ -33,14 +35,15 @@ public class LogInProfessorActivity extends AppCompatActivity {
                 String email = loginEmail.getText().toString();
                 String pass = loginPassword.getText().toString();
 
-                if(email.isEmpty()) {
+                if (email.isEmpty()) {
                     loginEmail.setError("Email cannot be empty");
                 }
-                if(pass.isEmpty())
-                {
+                if (pass.isEmpty()) {
                     loginPassword.setError("Password cannot be empty");
                 }
-                }
+
+                startActivity(new Intent(LogInProfessorActivity.this, NFCReaderActivity.class));
+            }
         });
 
         signupRedirectText.setOnClickListener(new View.OnClickListener() {
