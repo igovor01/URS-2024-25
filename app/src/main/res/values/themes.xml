@@ -7,6 +7,10 @@
 
     <style name="Theme.URS202425" parent="Base.Theme.URS202425" />
 
+    <style name="Theme.SignUpLogIn" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimaryVariant">@color/lavander</item>
+    </style>
+
     <style name="roundedImageViewRounded">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>

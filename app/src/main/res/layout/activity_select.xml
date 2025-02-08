@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".SelectActivity">
+
+    <TextView
+        android:id="@+id/select_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose your role"
+        android:textColor="@color/lavander"
+        android:textSize="22sp"
+        android:padding="8dp"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/professor_button"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:text="Professor"
+        android:textSize="18sp"
+        android:backgroundTint="@color/lavander"
+        android:layout_marginBottom="15dp"/>
+
+    <Button
+        android:id="@+id/student_button"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:text="Student"
+        android:textSize="18sp"
+        android:backgroundTint="@color/lavander"/>
+
+</LinearLayout>

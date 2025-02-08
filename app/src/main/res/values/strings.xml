@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">URS-2024-25</string>
+    <string name="app_name">URS–2024–25</string>
+    <string name="welcome_to_our_app">Welcome to our app!</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="email">email</string>
     <string name="please_tap_at_nfc_sensor">Place your phone/card near the NFC reader."</string>
     <string name="please_enable_your_nfc">Please Enable your NFC!</string>
     <string name="nfc_not_supported">"NFC Not Supported!</string>

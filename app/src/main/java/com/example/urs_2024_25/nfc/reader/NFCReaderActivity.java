@@ -43,7 +43,7 @@ public class NFCReaderActivity extends AppCompatActivity implements Attendance.A
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_nfc_reader);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         attendance = new Attendance(db, this);
 
