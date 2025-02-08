@@ -1,4 +1,4 @@
-package com.example.urs_2024_25;
+package com.example.urs_2024_25.nfc.reader;
 
 import android.app.Application;
 import android.app.PendingIntent;
@@ -24,6 +24,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.example.urs_2024_25.R;
 
 import java.math.BigInteger;
 import java.util.Arrays;

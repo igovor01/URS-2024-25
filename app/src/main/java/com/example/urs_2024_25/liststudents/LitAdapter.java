@@ -1,6 +1,6 @@
 //dobije listu ListData objekata, za svakog studenta postavi ime sliku i vrime
 //prikaze sve te studente
-package com.example.urs_2024_25;
+package com.example.urs_2024_25.liststudents;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.urs_2024_25.R;
 
 import java.util.ArrayList;
 

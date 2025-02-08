@@ -1,4 +1,4 @@
-package com.example.urs_2024_25;
+package com.example.urs_2024_25.nfc.reader;
 
 import android.app.Activity;
 import android.content.Context;

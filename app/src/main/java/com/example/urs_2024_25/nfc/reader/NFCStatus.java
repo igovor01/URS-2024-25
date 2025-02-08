@@ -1,4 +1,4 @@
-package com.example.urs_2024_25;
+package com.example.urs_2024_25.nfc.reader;
 
 public enum NFCStatus {
     NoOperation,
