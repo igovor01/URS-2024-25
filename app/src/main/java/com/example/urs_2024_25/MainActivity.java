@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.urs_2024_25.liststudents.ListStudentsActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.nio.charset.StandardCharsets;
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements Attendance.Attend
         // Initialize Views and ViewModel
         initViews();
         initViewModel();
+
+        // Initialize the List Students button to be clickable
+        initListStudentsButton();
 
         // Initialize NFC adapter
         initNfcAdapter();
@@ -81,15 +86,15 @@ public class MainActivity extends AppCompatActivity implements Attendance.Attend
             Log.e(TAG, "NFC is not supported on this device.");
             mTextViewStatus.setText("NFC not supported");
         }
+    }
 
-        Button buttonListStudents = findViewById(R.id.button_list_students); // Replace with the correct ID from XML
+    private void initListStudentsButton() {
+        Button buttonListStudents = findViewById(R.id.button_list_students);
         buttonListStudents.setClickable(true); // Ensure button is clickable
         buttonListStudents.setOnClickListener(v -> {
-            Log.d(TAG, "Button clicked!");
-            Intent intent = new Intent(MainActivity.this, ListedStudents.class);
-            startActivity(intent);
+            Log.d(TAG, "Button List Students clicked!");
+            startActivity(new Intent(MainActivity.this, ListStudentsActivity.class));
         });
-
     }
 
     @Override
