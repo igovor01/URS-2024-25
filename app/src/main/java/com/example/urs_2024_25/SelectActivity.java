@@ -8,6 +8,9 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.urs_2024_25.login.LogInProfessorActivity;
+import com.example.urs_2024_25.login.LogInStudentActivity;
+
 public class SelectActivity extends AppCompatActivity {
 
     @Override

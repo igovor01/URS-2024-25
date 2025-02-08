@@ -1,4 +1,4 @@
-package com.example.urs_2024_25;
+package com.example.urs_2024_25.signup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.urs_2024_25.R;
+import com.example.urs_2024_25.login.LogInProfessorActivity;
 
 public class SignUpProfessorActivity extends AppCompatActivity {
 

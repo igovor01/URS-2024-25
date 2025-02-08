@@ -1,4 +1,4 @@
-package com.example.urs_2024_25;
+package com.example.urs_2024_25.signup;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.urs_2024_25.R;
+import com.example.urs_2024_25.login.LogInStudentActivity;
 
 public class SignUpStudentActivity extends AppCompatActivity {
 
