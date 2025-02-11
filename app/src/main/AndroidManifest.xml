@@ -6,7 +6,9 @@
     <uses-permission android:name="android.permission.NFC" />
 
     <!-- Declare that the app requires NFC hardware -->
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -27,8 +29,7 @@
             android:exported="false" />
         <activity
             android:name=".signup.SignUpProfessorActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".SelectActivity"
             android:exported="true">
@@ -43,9 +44,34 @@
             android:exported="false" />
         <activity
             android:name=".nfc.reader.NFCReaderActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
+
+        <activity
+            android:name=".nfc.reader.NFCReaderActivity2"
+            android:exported="true"></activity>
+        <activity
+            android:name=".nfc.cardemulation.NfcCardEmulationActivity"
+            android:exported="true"></activity>
+
         <activity android:name=".liststudents.ListStudentsActivity" />
+
+        <service
+            android:name=".nfc.cardemulation.NfcCardEmulationService"
+            android:exported="true"
+            android:permission="android.permission.BLUETOOTH">
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.NFC_DISCOVERED" />
+                <action android:name="android.nfc.cardemulation.action.ACTION_TAG_DISCOVERED" />
+            </intent-filter>
+
+            <!-- Meta-data to define the AID (Application Identifier) -->
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/nfc_tech_filter" />
+        </service>
 
     </application>
 
