@@ -4,6 +4,7 @@
 
     <!-- NFC Permission -->
     <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc.hce" android:required="true" />
 
     <!-- Declare that the app requires NFC hardware -->
     <uses-feature

@@ -4,6 +4,11 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
+import android.nfc.tech.NfcA;
+import android.nfc.tech.NfcB;
+import android.nfc.tech.NfcF;
+import android.nfc.tech.NfcV;
+import android.nfc.tech.MifareClassic;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -23,38 +28,27 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
 
     private static final String TAG = NFCReaderActivity2.class.getSimpleName();
     private TextView mTextViewExplanation, mTextViewStatus;
-    private MainViewModel viewModel;
     private NfcAdapter nfcAdapter;
     private Attendance attendance;
     private static final int DEFAULT_CLASS_ID = 1;
 
-    //onCreate() → onStart() → onResume() -> first launch
-    //onResume() is always paired with onPause()
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println(TAG);
-        Log.d(TAG, "onCreate()");
-
         setContentView(R.layout.activity_nfc_reader);
+
+        // Initialize Firebase Firestore and Attendance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         attendance = new Attendance(db, this);
 
-        // Initialize Views and ViewModel
+        // Initialize Views
         initViews();
-        Log.d(TAG, "initviews()");
 
-        // Initialize the List Students button to be clickable
+        // Initialize the List Students button
         initListStudentsButton();
-
-
-        Log.d(TAG, "initbutton()");
 
         // Initialize NFC adapter
         initNfcAdapter();
-
-
-        Log.d(TAG, "initadapter()");
     }
 
     @Override
@@ -74,7 +68,12 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
             Bundle options = new Bundle();
             options.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, 250);
             nfcAdapter.enableReaderMode(this, this,
-                    NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK, options);
+                    NfcAdapter.FLAG_READER_NFC_A |
+                            NfcAdapter.FLAG_READER_NFC_B |
+                            NfcAdapter.FLAG_READER_NFC_F |
+                            NfcAdapter.FLAG_READER_NFC_V |
+                            NfcAdapter.FLAG_READER_NFC_BARCODE |
+                            NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK, options);
             mTextViewStatus.setText("Hold NFC card near the device...");
         }
     }
@@ -89,6 +88,26 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
     public void onTagDiscovered(Tag tag) {
         Log.d(TAG, "NFC Tag Discovered!");
 
+        // Check for supported NFC technologies
+        if (IsoDep.get(tag) != null) {
+            handleIsoDepTag(tag);
+        } else if (NfcA.get(tag) != null) {
+            handleNfcATag(tag);
+        } else if (NfcB.get(tag) != null) {
+            handleNfcBTag(tag);
+        } else if (NfcF.get(tag) != null) {
+            handleNfcFTag(tag);
+        } else if (NfcV.get(tag) != null) {
+            handleNfcVTag(tag);
+        } else if (MifareClassic.get(tag) != null) {
+            handleMifareClassicTag(tag);
+        } else {
+            Log.e(TAG, "Unsupported NFC tag type.");
+            runOnUiThread(() -> Toast.makeText(this, "Unsupported NFC tag type", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private void handleIsoDepTag(Tag tag) {
         IsoDep isoDep = IsoDep.get(tag);
         if (isoDep != null) {
             try {
@@ -103,30 +122,62 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
                 };
                 byte[] response = isoDep.transceive(selectApdu);
 
-
                 if (response != null) {
                     String responseHex = bytesToHex(response);
                     String customIdHex = responseHex.substring(0, responseHex.length() - 4); // Remove "9000"
 
                     Log.d(TAG, "Received Response ID Hex (as hex): " + responseHex);
                     Log.d(TAG, "Received Custom ID (as hex): " + customIdHex);
+
                     // Convert HEX string to long
                     long customId = Long.parseLong(customIdHex, 16);
-
                     Log.d(TAG, "Received Custom ID (as long): " + customId);
 
                     runOnUiThread(() -> mTextViewExplanation.setText("Custom ID: " + customId));
 
+                    // Record attendance
                     attendance.recordAttendance(DEFAULT_CLASS_ID, (int) customId);
                 } else {
                     Log.e(TAG, "No response from card.");
+                    runOnUiThread(() -> Toast.makeText(this, "No response from card", Toast.LENGTH_SHORT).show());
                 }
 
                 isoDep.close();
             } catch (IOException | NumberFormatException e) {
                 Log.e(TAG, "Error processing NFC tag", e);
+                runOnUiThread(() -> Toast.makeText(this, "Error processing NFC tag", Toast.LENGTH_SHORT).show());
             }
         }
+    }
+
+    private void handleNfcATag(Tag tag) {
+        // Handle NFC-A tags (e.g., Mifare Ultralight)
+        Log.d(TAG, "NFC-A tag detected.");
+        runOnUiThread(() -> Toast.makeText(this, "NFC-A tag detected", Toast.LENGTH_SHORT).show());
+    }
+
+    private void handleNfcBTag(Tag tag) {
+        // Handle NFC-B tags
+        Log.d(TAG, "NFC-B tag detected.");
+        runOnUiThread(() -> Toast.makeText(this, "NFC-B tag detected", Toast.LENGTH_SHORT).show());
+    }
+
+    private void handleNfcFTag(Tag tag) {
+        // Handle NFC-F tags (e.g., Felica)
+        Log.d(TAG, "NFC-F tag detected.");
+        runOnUiThread(() -> Toast.makeText(this, "NFC-F tag detected", Toast.LENGTH_SHORT).show());
+    }
+
+    private void handleNfcVTag(Tag tag) {
+        // Handle NFC-V tags (e.g., ISO 15693)
+        Log.d(TAG, "NFC-V tag detected.");
+        runOnUiThread(() -> Toast.makeText(this, "NFC-V tag detected", Toast.LENGTH_SHORT).show());
+    }
+
+    private void handleMifareClassicTag(Tag tag) {
+        // Handle Mifare Classic tags
+        Log.d(TAG, "Mifare Classic tag detected.");
+        runOnUiThread(() -> Toast.makeText(this, "Mifare Classic tag detected", Toast.LENGTH_SHORT).show());
     }
 
     // Convert hex string to byte array
@@ -164,20 +215,17 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
 
     private void initListStudentsButton() {
         Button buttonListStudents = findViewById(R.id.button_list_students);
-        buttonListStudents.setClickable(true); // Ensure button is clickable
         buttonListStudents.setOnClickListener(v -> {
             Log.d(TAG, "Button List Students clicked!");
             startActivity(new Intent(NFCReaderActivity2.this, ListStudentsActivity.class));
         });
     }
 
-
     // AttendanceCallback implementation
     @Override
     public void onSuccess(String message) {
         runOnUiThread(() -> {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            // Optionally load and display updated attendance data
             attendance.loadAttendanceData();
         });
     }
@@ -193,10 +241,7 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
     @Override
     public void onDataLoaded(String data) {
         runOnUiThread(() -> {
-            // You can update a TextView or other UI element to show the attendance data
-            // ivana: ovo je ono kad se displayaju svi skenovi
             mTextViewExplanation.setText(data);
         });
     }
-
 }

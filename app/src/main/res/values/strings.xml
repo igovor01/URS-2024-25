@@ -6,4 +6,6 @@
     <string name="please_tap_at_nfc_sensor">Place your phone/card near the NFC reader."</string>
     <string name="please_enable_your_nfc">Please Enable your NFC!</string>
     <string name="nfc_not_supported">"NFC Not Supported!</string>
+    <string name="hce_service_description">NFC Card Emulation Service</string>
+    <string name="aid_group_description">Custom AID Group</string>
 </resources>
