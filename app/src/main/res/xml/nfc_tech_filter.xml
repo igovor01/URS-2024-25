@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Define the AID for the NFC card emulation -->
-    <service-aid filter="F00123456789" />
-</host-apdu-service>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <tech-list>
+        <tech>android.nfc.tech.IsoDep</tech>
+    </tech-list>
+</resources>
