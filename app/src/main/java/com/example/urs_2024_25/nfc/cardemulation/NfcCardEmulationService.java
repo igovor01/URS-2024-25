@@ -5,10 +5,12 @@ import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.Arrays;
+
 public class NfcCardEmulationService extends HostApduService {
 
     private static final String TAG = "HCEService";
-    private static final long CUSTOM_ID = 258424815;  // Example custom ID (as an int)
+    private static final long CUSTOM_ID = 123456701;  // Example custom ID (as an int)
     private static final String RESPONSE_OK = "9000"; // Status word for success
 
     @Override
@@ -16,21 +18,36 @@ public class NfcCardEmulationService extends HostApduService {
         Log.d(TAG, "Received APDU: " + bytesToHex(apdu));
 
         // Respond with the custom ID if it's a SELECT APDU
-        if (isSelectApdu(apdu)) {
+        if (Arrays.equals(hexToBytes("00A40400" + String.format("%02X",
+                "F222222222".length() / 2) + "F222222222"), apdu)) {
             Log.d(TAG, "SELECT command received. Responding with custom ID.");
 
             Log.d(TAG, "Custom ID in Dec: " + CUSTOM_ID);
             // Convert int custom ID to hex and append the response status
-            String customIdHex = Long.toHexString(CUSTOM_ID).toUpperCase();
 
-            Log.d(TAG, "Custom ID in Hex: " + customIdHex);
-            return hexToBytes(customIdHex + RESPONSE_OK); // Send custom ID followed by success status
+            byte[] studentIdBytes = Long.toString(CUSTOM_ID).getBytes();
+
+             Log.d(TAG, "Custom ID in bytes: " + studentIdBytes);
+            return ConcatArrays(studentIdBytes, hexToBytes("9000")); // Send custom ID followed by success status
         } else {
             // Return failure if APDU command is unrecognized
-            return hexToBytes(RESPONSE_OK);
+            return hexToBytes("0000");
         }
     }
 
+    public static byte[] ConcatArrays(byte[] first, byte[]... rest) {
+        int totalLength = first.length;
+        for (byte[] array : rest) {
+            totalLength += array.length;
+        }
+        byte[] result = Arrays.copyOf(first, totalLength);
+        int offset = first.length;
+        for (byte[] array : rest) {
+            System.arraycopy(array, 0, result, offset, array.length);
+            offset += array.length;
+        }
+        return result;
+    }
     @Override
     public void onDeactivated(int reason) {
         // Handle deactivation
@@ -61,11 +78,12 @@ public class NfcCardEmulationService extends HostApduService {
         }
         return sb.toString();
     }
+
     // Replace this with the actual logic to fetch the logged-in student's ID
     private long getStudentIdFromDatabase() {
         // Simulate fetching the student ID
         // In practice, you would query your database or use an API call
-        return 258424815; // Example student ID
+        return 258424816; // Example student ID
     }
 }
 

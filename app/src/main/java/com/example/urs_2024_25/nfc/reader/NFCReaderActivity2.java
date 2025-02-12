@@ -18,6 +18,7 @@ import com.example.urs_2024_25.liststudents.ListStudentsActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.AttendanceCallback, NfcAdapter.ReaderCallback {
 
@@ -27,6 +28,9 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
     private NfcAdapter nfcAdapter;
     private Attendance attendance;
     private static final int DEFAULT_CLASS_ID = 1;
+    private static final byte[] SELECT_OK_SW = {(byte) 0x90, (byte) 0x00};
+
+    String gotData = "", finalGotData = "";
 
     //onCreate() → onStart() → onResume() -> first launch
     //onResume() is always paired with onPause()
@@ -95,39 +99,32 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
                 isoDep.connect();
 
                 // APDU SELECT command to get custom ID
-                byte[] selectApdu = {
-                        (byte) 0x00, (byte) 0xA4,  // CLA + INS
-                        (byte) 0x04, 0x00,          // P1 + P2
-                        (byte) 0x07,                // Length of AID (7 bytes)
-                        (byte) 0xF0, (byte) 0x01, (byte) 0x23, (byte) 0x45, (byte) 0x67, (byte) 0x89 // AID
-                };
+                byte[] selectApdu = hexToBytes("00A40400" + String.format("%02X", "F222222222".length() / 2) + "F222222222");
                 byte[] response = isoDep.transceive(selectApdu);
 
+                int responseLength = response.length;
+                byte[] statusWord = {response[responseLength - 2], response[responseLength - 1]};
+                byte[] payload = Arrays.copyOf(response, responseLength - 2);
 
-                if (response != null) {
-                    String responseHex = bytesToHex(response);
-                    String customIdHex = responseHex.substring(0, responseHex.length() - 4); // Remove "9000"
+                if (Arrays.equals(SELECT_OK_SW, statusWord)) {
+                    // The remote NFC device will immediately respond with its stored account number
+                    String accountNumber = new String(payload, "UTF-8");
+                    Log.i(TAG, "Received: " + accountNumber);
+                    // Inform CardReaderFragment of received account number
 
-                    Log.d(TAG, "Received Response ID Hex (as hex): " + responseHex);
-                    Log.d(TAG, "Received Custom ID (as hex): " + customIdHex);
-                    // Convert HEX string to long
-                    long customId = Long.parseLong(customIdHex, 16);
+                    int accountNumberInt = Integer.parseInt(accountNumber);
+                    Log.i(TAG, "received int: " +accountNumberInt);
 
-                    Log.d(TAG, "Received Custom ID (as long): " + customId);
 
-                    runOnUiThread(() -> mTextViewExplanation.setText("Custom ID: " + customId));
+                        attendance.recordAttendance(DEFAULT_CLASS_ID, accountNumberInt);
 
-                    attendance.recordAttendance(DEFAULT_CLASS_ID, (int) customId);
-                } else {
-                    Log.e(TAG, "No response from card.");
                 }
-
-                isoDep.close();
-            } catch (IOException | NumberFormatException e) {
-                Log.e(TAG, "Error processing NFC tag", e);
+            } catch (IOException e) {
+                Log.e(TAG, "Error communicating with card: " + e.toString());
             }
         }
     }
+
 
     // Convert hex string to byte array
     private byte[] hexToBytes(String s) {
@@ -142,11 +139,15 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
 
     // Convert byte array to hex string
     private String bytesToHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            sb.append(String.format("%02X", b));
+        final char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        char[] hexChars = new char[bytes.length * 2];
+        int v;
+        for (int j = 0; j < bytes.length; j++) {
+            v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
-        return sb.toString();
+        return new String(hexChars);
     }
 
     private void initViews() {
