@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.urs_2024_25.R;
 import com.example.urs_2024_25.nfc.reader.NFCReaderActivity2;
 import com.example.urs_2024_25.signup.SignUpProfessorActivity;
-import com.example.urs_2024_25.nfc.reader.NFCReaderActivity;
 
 public class LogInProfessorActivity extends AppCompatActivity {
 

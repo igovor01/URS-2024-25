@@ -24,13 +24,10 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
 
     private static final String TAG = NFCReaderActivity2.class.getSimpleName();
     private TextView mTextViewExplanation, mTextViewStatus;
-    private MainViewModel viewModel;
     private NfcAdapter nfcAdapter;
     private Attendance attendance;
     private static final int DEFAULT_CLASS_ID = 1;
     private static final byte[] SELECT_OK_SW = {(byte) 0x90, (byte) 0x00};
-
-    String gotData = "", finalGotData = "";
 
     //onCreate() → onStart() → onResume() -> first launch
     //onResume() is always paired with onPause()
@@ -46,19 +43,12 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
 
         // Initialize Views and ViewModel
         initViews();
-        Log.d(TAG, "initviews()");
 
         // Initialize the List Students button to be clickable
         initListStudentsButton();
 
-
-        Log.d(TAG, "initbutton()");
-
         // Initialize NFC adapter
         initNfcAdapter();
-
-
-        Log.d(TAG, "initadapter()");
     }
 
     @Override
@@ -113,14 +103,13 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
                     // Inform CardReaderFragment of received account number
 
                     int accountNumberInt = Integer.parseInt(accountNumber);
-                    Log.i(TAG, "received int: " +accountNumberInt);
+                    Log.i(TAG, "Received INT: " + accountNumberInt);
 
-
-                        attendance.recordAttendance(DEFAULT_CLASS_ID, accountNumberInt);
+                    attendance.recordAttendance(DEFAULT_CLASS_ID, accountNumberInt);
 
                 }
             } catch (IOException e) {
-                Log.e(TAG, "Error communicating with card: " + e.toString());
+                Log.e(TAG, "Error communicating with card: " + e);
             }
         }
     }
@@ -195,7 +184,6 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
     public void onDataLoaded(String data) {
         runOnUiThread(() -> {
             // You can update a TextView or other UI element to show the attendance data
-            // ivana: ovo je ono kad se displayaju svi skenovi
             mTextViewExplanation.setText(data);
         });
     }

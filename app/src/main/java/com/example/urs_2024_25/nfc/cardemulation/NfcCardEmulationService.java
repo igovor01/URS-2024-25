@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class NfcCardEmulationService extends HostApduService {
 
     private static final String TAG = "HCEService";
-    private static final long CUSTOM_ID = 123456701;  // Example custom ID (as an int)
+    private static final long CUSTOM_ID = 123456703;  // Example custom ID (as an int)
     private static final String RESPONSE_OK = "9000"; // Status word for success
 
     @Override
@@ -24,10 +24,8 @@ public class NfcCardEmulationService extends HostApduService {
 
             Log.d(TAG, "Custom ID in Dec: " + CUSTOM_ID);
             // Convert int custom ID to hex and append the response status
-
             byte[] studentIdBytes = Long.toString(CUSTOM_ID).getBytes();
 
-             Log.d(TAG, "Custom ID in bytes: " + studentIdBytes);
             return ConcatArrays(studentIdBytes, hexToBytes("9000")); // Send custom ID followed by success status
         } else {
             // Return failure if APDU command is unrecognized
@@ -77,13 +75,6 @@ public class NfcCardEmulationService extends HostApduService {
             sb.append(String.format("%02X", b));
         }
         return sb.toString();
-    }
-
-    // Replace this with the actual logic to fetch the logged-in student's ID
-    private long getStudentIdFromDatabase() {
-        // Simulate fetching the student ID
-        // In practice, you would query your database or use an API call
-        return 258424816; // Example student ID
     }
 }
 
