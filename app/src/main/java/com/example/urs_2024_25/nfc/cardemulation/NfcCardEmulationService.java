@@ -1,6 +1,5 @@
 package com.example.urs_2024_25.nfc.cardemulation;
 
-
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,23 +9,37 @@ import java.util.Arrays;
 public class NfcCardEmulationService extends HostApduService {
 
     private static final String TAG = "HCEService";
-    private static final long CUSTOM_ID = 123456703;  // Example custom ID (as an int)
+    private long userId;
     private static final String RESPONSE_OK = "9000"; // Status word for success
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
     public byte[] processCommandApdu(byte[] apdu, Bundle extras) {
+        // Retrieve the user ID passed from the activity (via the Intent) from the extras
+        if (extras != null) {
+            userId = extras.getLong("USER_ID"); // Get the user ID from the extras bundle
+            Log.d(TAG, "User ID set to: " + userId);
+        } else {
+            Log.e(TAG, "No USER_ID received!"); // Log error if user ID is missing
+            // Handle error accordingly
+        }
+
         Log.d(TAG, "Received APDU: " + bytesToHex(apdu));
 
-        // Respond with the custom ID if it's a SELECT APDU
+        // Respond with the userId if it's a SELECT APDU
         if (Arrays.equals(hexToBytes("00A40400" + String.format("%02X",
                 "F222222222".length() / 2) + "F222222222"), apdu)) {
-            Log.d(TAG, "SELECT command received. Responding with custom ID.");
+            Log.d(TAG, "SELECT command received. Responding with user ID.");
 
-            Log.d(TAG, "Custom ID in Dec: " + CUSTOM_ID);
-            // Convert int custom ID to hex and append the response status
-            byte[] studentIdBytes = Long.toString(CUSTOM_ID).getBytes();
+            Log.d(TAG, "User ID in Dec: " + userId);
+            // Convert user ID to byte array and append the response status
+            byte[] userIdBytes = Long.toString(userId).getBytes();
 
-            return ConcatArrays(studentIdBytes, hexToBytes("9000")); // Send custom ID followed by success status
+            return ConcatArrays(userIdBytes, hexToBytes("9000")); // Send user ID followed by success status
         } else {
             // Return failure if APDU command is unrecognized
             return hexToBytes("0000");
@@ -46,6 +59,7 @@ public class NfcCardEmulationService extends HostApduService {
         }
         return result;
     }
+
     @Override
     public void onDeactivated(int reason) {
         // Handle deactivation
@@ -77,5 +91,3 @@ public class NfcCardEmulationService extends HostApduService {
         return sb.toString();
     }
 }
-
-
