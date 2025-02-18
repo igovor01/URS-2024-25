@@ -11,6 +11,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.urs_2024_25.R;
+import com.example.urs_2024_25.nfc.cardemulation.NfcCardEmulationActivity;
 import com.example.urs_2024_25.signup.SignUpStudentActivity;
 
 public class LogInStudentActivity extends AppCompatActivity {
@@ -41,6 +42,8 @@ public class LogInStudentActivity extends AppCompatActivity {
                 if (pass.isEmpty()) {
                     loginPassword.setError("Password cannot be empty");
                 }
+                startActivity(new Intent(LogInStudentActivity.this, NfcCardEmulationActivity.class));
+
             }
         });
 

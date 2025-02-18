@@ -6,7 +6,13 @@
     <uses-permission android:name="android.permission.NFC" />
 
     <!-- Declare that the app requires NFC hardware -->
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.nfc.hce"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -20,6 +26,14 @@
         tools:targetApi="31">
 
         <activity
+            android:name=".SelectActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".signup.SignUpStudentActivity"
             android:exported="false" />
         <activity
@@ -27,25 +41,46 @@
             android:exported="false" />
         <activity
             android:name=".signup.SignUpProfessorActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".SelectActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".login.LogInProfessorActivity"
             android:exported="false" />
+        <!-- Old reader activtiy, currently unused -->
         <activity
             android:name=".nfc.reader.NFCReaderActivity"
+            android:exported="true" />
+
+        <!-- NFC reader activity -->
+        <activity
+            android:name=".nfc.reader.NFCReaderActivity2"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
         </activity>
+        <!-- NFC card emulation activity -->
+        <activity
+            android:name=".nfc.cardemulation.NfcCardEmulationActivity"
+            android:exported="true" />
         <activity android:name=".liststudents.ListStudentsActivity" />
+        <!-- NFC card emulation sevice -->
+        <service
+            android:name=".nfc.cardemulation.NfcCardEmulationService"
+            android:exported="true"
+            android:permission="android.permission.BIND_NFC_SERVICE">
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- Meta-data to define the AID (Application Identifier) -->
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/hce_service" />
+        </service>
 
     </application>
 
