@@ -8,8 +8,12 @@ import android.widget.Toast;
 
 import com.example.urs_2024_25.R;
 
+import android.os.Handler;
+import android.view.View;
+
 public class NfcCardEmulationActivity extends Activity {
     private Button emulateCardButton;
+    private View dimOverlay;
     private int userId;
 
     @Override
@@ -18,21 +22,34 @@ public class NfcCardEmulationActivity extends Activity {
         setContentView(R.layout.activity_nfc_card_emulation);
 
         emulateCardButton = findViewById(R.id.emulateCardButton);
+        dimOverlay = findViewById(R.id.dimOverlay);
 
         userId = getIntent().getIntExtra("USER_ID", -1);
-
         if (userId == -1) {
             Toast.makeText(this, "Invalid user ID", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        emulateCardButton.setOnClickListener(v -> startCardEmulation());
+        emulateCardButton.setOnClickListener(v -> {
+            startCardEmulation();
+            showButtonEffect();
+        });
     }
 
     private void startCardEmulation() {
-        Intent intent = new Intent(NfcCardEmulationActivity.this, NfcCardEmulationService.class);
+        Intent intent = new Intent(this, NfcCardEmulationService.class);
         intent.putExtra("USER_ID", userId);
         startService(intent);
     }
+
+    private void showButtonEffect() {
+        dimOverlay.setVisibility(View.VISIBLE);
+        emulateCardButton.bringToFront();
+
+        new Handler().postDelayed(() -> {
+            dimOverlay.setVisibility(View.GONE);
+        }, 5000);
+    }
 }
+
