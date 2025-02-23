@@ -1,5 +1,6 @@
 package com.example.urs_2024_25.nfc.cardemulation;
 
+import android.content.Intent;
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,6 @@ public class NfcCardEmulationService extends HostApduService {
 
     private static final String TAG = "HCEService";
     private long userId;
-    private static final String RESPONSE_OK = "9000"; // Status word for success
 
     @Override
     public void onCreate() {
@@ -18,16 +18,18 @@ public class NfcCardEmulationService extends HostApduService {
     }
 
     @Override
-    public byte[] processCommandApdu(byte[] apdu, Bundle extras) {
-        // Retrieve the user ID passed from the activity (via the Intent) from the extras
-        if (extras != null) {
-            userId = extras.getLong("USER_ID"); // Get the user ID from the extras bundle
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        userId = Integer.toUnsignedLong(intent.getIntExtra("USER_ID", -1));
+        if (userId != -1) {
             Log.d(TAG, "User ID set to: " + userId);
         } else {
-            Log.e(TAG, "No USER_ID received!"); // Log error if user ID is missing
-            // Handle error accordingly
+            Log.e(TAG, "No USER_ID received!");
         }
+        return START_NOT_STICKY;
+    }
 
+    @Override
+    public byte[] processCommandApdu(byte[] apdu, Bundle extras) {
         Log.d(TAG, "Received APDU: " + bytesToHex(apdu));
 
         // Respond with the userId if it's a SELECT APDU
