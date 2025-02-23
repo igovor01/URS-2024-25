@@ -37,11 +37,23 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:id="@+id/signup_student_email"
+                android:id="@+id/signup_student_name"
                 android:background="@drawable/custom_edittext"
                 android:layout_marginTop="40dp"
                 android:padding="8dp"
-                android:hint="@string/email"
+                android:hint="@string/name"
+                android:drawableStart="@drawable/baseline_person_24"
+                android:drawablePadding="8dp"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/signup_student_surname"
+                android:background="@drawable/custom_edittext"
+                android:layout_marginTop="20dp"
+                android:padding="8dp"
+                android:hint="@string/surname"
                 android:drawableStart="@drawable/baseline_person_24"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"/>
@@ -53,7 +65,7 @@
                 android:background="@drawable/custom_edittext"
                 android:layout_marginTop="20dp"
                 android:padding="8dp"
-                android:hint="password"
+                android:hint="@string/password"
                 android:drawableStart="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"/>
@@ -61,11 +73,21 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:text="@string/sign_up_student_card"
+                android:id="@+id/card_reader_button"
+                android:layout_marginTop="20dp"
+                android:textSize="18sp"
+                android:backgroundTint="@color/lavander"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:text="Sign Up"
+                android:enabled="false"
                 android:id="@+id/signup_student_button"
                 android:layout_marginTop="30dp"
                 android:textSize="18sp"
-                android:backgroundTint="@color/lavander"/>
+                android:backgroundTint="@color/gray"/>
 
             <TextView
                 android:layout_width="wrap_content"

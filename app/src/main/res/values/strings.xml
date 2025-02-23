@@ -3,6 +3,10 @@
     <string name="welcome_to_our_app">Welcome to our app!</string>
     <string name="sign_up">Sign Up</string>
     <string name="email">email</string>
+    <string name="name">name</string>
+    <string name="surname">surname</string>
+    <string name="password">password</string>
+    <string name="sign_up_student_card">Read your student card</string>
     <string name="please_tap_at_nfc_sensor">Place your phone/card near the NFC reader."</string>
     <string name="please_enable_your_nfc">Please Enable your NFC!</string>
     <string name="nfc_not_supported">"NFC Not Supported!</string>
