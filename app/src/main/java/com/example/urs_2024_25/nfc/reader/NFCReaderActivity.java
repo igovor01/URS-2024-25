@@ -1,6 +1,7 @@
 package com.example.urs_2024_25.nfc.reader;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.nfc.NdefMessage;
@@ -191,7 +192,12 @@ public class NFCReaderActivity extends AppCompatActivity implements Attendance.A
         //        +  "Card ID(dec):" + nfcRecord.getNfcId() + "\nTimeStamp:" + nfcRecord.getTimeStamp());
 
         //createNdefMessage(tagData, id);
-        attendance.recordAttendance(DEFAULT_CLASS_ID, (int)tagIdDec);
+        Toast.makeText(this, "USER_ID: "+ tagIdDec, Toast.LENGTH_LONG).show();
+        var returnIntent = new Intent();
+        returnIntent.putExtra("USER_ID", (int)tagIdDec);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
+        //attendance.recordAttendance(DEFAULT_CLASS_ID, (int)tagIdDec);
     }
 
     // AttendanceCallback implementation
