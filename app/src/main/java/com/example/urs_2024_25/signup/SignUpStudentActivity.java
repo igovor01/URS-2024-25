@@ -12,20 +12,18 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.urs_2024_25.Attendance;
 import com.example.urs_2024_25.R;
-import com.example.urs_2024_25.liststudents.UserModel;
 import com.example.urs_2024_25.login.LogInStudentActivity;
 import com.example.urs_2024_25.nfc.reader.NFCReaderActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.List;
 
 public class SignUpStudentActivity extends AppCompatActivity implements Users2.DataCallback {
 
     public static final String TAG = SignUpStudentActivity.class.getSimpleName();
     public static final int REQUEST_CODE = 123;
     private EditText signupName, signupSurname, signupPassword;
+
+    private int userId = -1;
 
     private Users2 users;
 
@@ -58,15 +56,20 @@ public class SignUpStudentActivity extends AppCompatActivity implements Users2.D
 
             if (name.isEmpty()) {
                 signupName.setError("Name cannot be empty");
+                return;
             }
             if (surname.isEmpty()) {
                 signupSurname.setError("Surname cannot be empty");
+                return;
             }
             if (pass.isEmpty()) {
                 signupPassword.setError("Password cannot be empty");
+                return;
             }
 
-            users.recordUser("ivanaa", "goo", 123);
+            if(userId != -1){
+                users.recordUser(name, surname, userId);
+            }
         });
 
         loginRedirectText.setOnClickListener(v -> startActivity(
@@ -79,16 +82,14 @@ public class SignUpStudentActivity extends AppCompatActivity implements Users2.D
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE && resultCode == NFCReaderActivity.RESULT_OK) {
-            var userId = data.getIntExtra("USER_ID", -1);
+            userId = data.getIntExtra("USER_ID", -1);
             Toast.makeText(this, "Got Result: "+userId, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onSuccess(String message) {
-        runOnUiThread(() -> {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        });
+        runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
     }
 
     @Override
