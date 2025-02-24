@@ -2,7 +2,6 @@ package com.example.urs_2024_25.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,8 +15,7 @@ import com.example.urs_2024_25.signup.SignUpStudentActivity;
 
 public class LogInStudentActivity extends AppCompatActivity {
 
-    private EditText loginEmail, loginPassword;
-
+    private EditText loginEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,32 +24,40 @@ public class LogInStudentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log_in_student);
 
         loginEmail = findViewById(R.id.login_student_email);
-        loginPassword = findViewById(R.id.login_student_password);
         TextView signupRedirectText = findViewById(R.id.signup_student_redirect);
         Button loginButton = findViewById(R.id.login_student_button);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = loginEmail.getText().toString();
-                String pass = loginPassword.getText().toString();
+        loginButton.setOnClickListener(v -> {
+            String email = loginEmail.getText().toString();
 
-                if (email.isEmpty()) {
-                    loginEmail.setError("Email cannot be empty");
-                }
-                if (pass.isEmpty()) {
-                    loginPassword.setError("Password cannot be empty");
-                }
-                startActivity(new Intent(LogInStudentActivity.this, NfcCardEmulationActivity.class));
-
+            if (email.isEmpty()) {
+                loginEmail.setError("Email cannot be empty");
+                return;
             }
+
+            int userId = getUserIdByEmail(email);
+            if (userId == -1) {
+                loginEmail.setError("Invalid email");
+                return;
+            }
+
+            Intent intent = new Intent(LogInStudentActivity.this, NfcCardEmulationActivity.class);
+            intent.putExtra("USER_ID", userId);
+            startActivity(intent);
         });
 
-        signupRedirectText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LogInStudentActivity.this, SignUpStudentActivity.class));
-            }
-        });
+        signupRedirectText.setOnClickListener(v ->
+                startActivity(new Intent(LogInStudentActivity.this, SignUpStudentActivity.class))
+        );
+    }
+
+    private int getUserIdByEmail(String email) {
+        switch (email) {
+            case "ela": return 258424815;
+            case "karla": return 257279471;
+            case "ivana": return 258793359;
+            case "marija": return 258765135;
+            default: return -1;
+        }
     }
 }

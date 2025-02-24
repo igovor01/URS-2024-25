@@ -5,15 +5,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lavander"
     tools:context=".nfc.reader.NFCReaderActivity">
 
-    <!-- Explanation TextView -->
+    <!-- Centered Explanation Text -->
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_view_explanation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/app_name"
+        android:text="Place your phone for scanning"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -23,18 +28,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="textStart"
-        app:layout_constraintTop_toBottomOf="@id/button_list_students"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- List Students Button -->
-    <Button
-        android:id="@+id/button_list_students"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="List Students"
+        android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/text_view_explanation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- List Students Button at the Bottom -->
+    <Button
+        android:id="@+id/button_list_students"
+        android:layout_width="256dp"
+        android:layout_height="84dp"
+        android:text="List Students"
+        android:textSize="20sp"
+        android:textColor="@color/lavander"
+        android:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="32dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
