@@ -83,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Sign Up"
-                android:enabled="false"
+                android:enabled="true"
                 android:id="@+id/signup_student_button"
                 android:layout_marginTop="30dp"
                 android:textSize="18sp"

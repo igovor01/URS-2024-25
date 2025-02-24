@@ -49,6 +49,11 @@ public class ListStudentsActivity extends AppCompatActivity {
             public void onError(String errorMessage) {
                 Toast.makeText(ListStudentsActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void onSuccess(String message) {
+
+            }
         }, 1L);
     }
 }

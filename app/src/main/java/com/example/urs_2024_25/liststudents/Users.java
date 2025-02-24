@@ -3,25 +3,67 @@ import static android.content.ContentValues.TAG;
 
 import android.util.Log;
 
+ import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Users {
     private static final String COLLECTION_NAME = "Students";
-
     private static final String FIELD_USER_ID = "userID";
     private static final String FIELD_NAME = "name";
-
     private static final String FIELD_SURNAME = "surname";
 
     public interface DataCallback {
         void onDataLoaded(List<UserModel> usersData);
         void onError(String errorMessage);
+        void onSuccess(String message);
+    }
+
+    public void recordUser(DataCallback callback, final int userId, String name, String surname) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(COLLECTION_NAME)
+                .whereEqualTo(FIELD_USER_ID, userId)
+                .whereEqualTo(FIELD_NAME, name)
+                .whereEqualTo(FIELD_SURNAME, surname)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().isEmpty()) {
+                                addNewUserRecord(callback, userId, name, surname);
+                            } else {
+                                callback.onError("User already recorded for this user");
+                            }
+                        } else {
+                            callback.onError("Error checking existing user");
+                        }
+                    }
+                });
+    }
+
+    private void addNewUserRecord(DataCallback callback, int userId, String name, String surname) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> user = new HashMap<>();
+        user.put(FIELD_USER_ID, userId);
+        user.put(FIELD_NAME, name);
+        user.put(FIELD_SURNAME, surname);
+
+        db.collection(COLLECTION_NAME)
+                .add(user)
+                .addOnSuccessListener(documentReference -> callback.onSuccess("User recorded successfully"))
+                .addOnFailureListener(e -> callback.onError("Error recording user"));
     }
 
 
