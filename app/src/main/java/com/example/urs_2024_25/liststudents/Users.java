@@ -40,7 +40,7 @@ public class Users {
                             // Only add valid users
                             if (userId != null && name != null && surname != null) {
                                 UserModel user = new UserModel();
-                                user.setUserID(userId);
+                                user.setUserID((long)userId);
                                 user.setName(name);
                                 user.setSurname(surname);
                                 usersData.add(user);

@@ -3,7 +3,7 @@ package com.example.urs_2024_25.liststudents;
 public class UserModel {
     private String name;
     private String surname;
-    private Long userID;
+    private long userID;
 
     private String timeStamp;
 
@@ -15,7 +15,7 @@ public class UserModel {
         this.surname = surname;
     }
 
-    public void setUserID(Long userID) {
+    public void setUserID(long userID) {
         this.userID = userID;
     }
 
@@ -33,5 +33,9 @@ public class UserModel {
 
     public String getSurname() {
         return this.surname;
+    }
+
+    public long getUserID() {
+        return this.userID;
     }
 }
