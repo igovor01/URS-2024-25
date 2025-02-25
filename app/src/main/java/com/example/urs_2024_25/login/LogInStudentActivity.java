@@ -2,9 +2,11 @@ package com.example.urs_2024_25.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,4 +62,65 @@ public class LogInStudentActivity extends AppCompatActivity {
             default: return -1;
         }
     }
+
+//    private int getUserID(String nameInput){
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("users")
+//                .whereEqualTo("name", nameInput)
+//                .get()
+//                .addOnSuccessListener(queryDocumentSnapshots -> {
+//                    if (!queryDocumentSnapshots.isEmpty()) {
+//                        // Get the first matching document
+//                        DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
+//
+//                        // Extract the userId
+//                        String userId = document.getString("userId");
+//                        String surname = document.getString("surname");
+//
+//                        // Now you have the userId
+//                        Log.d("FIRESTORE", "Found userId: " + userId + " for user: " + nameInput + " " + surname);
+//
+//                        assert userId != null;
+//                        userIdToEmulate = Integer.parseInt(userId);
+//                        // Do something with the userId
+//                        // For example, store it or use it for further queries
+//                    } else {
+//                        Log.d("FIRESTORE", "No user found with name: " + nameInput);
+//                        // Show message to user that no matching user was found
+//                        userIdToEmulate=-1;
+//                        Toast.makeText(LogInStudentActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.e("FIRESTORE", "Error searching for user", e);
+//                    userIdToEmulate=-1;
+//                    Toast.makeText(LogInStudentActivity.this, "Error searching for user", Toast.LENGTH_SHORT).show();
+//                });
+//        return userIdToEmulate;
+//    }
+//    private int getUserID(String name) {
+//        List<UserModel> usersDataList = new ArrayList<>();
+//        Users users = new Users();
+//        users.loadUsersFromDb(new Users.DataCallback() {
+//            @Override
+//            public void onDataLoaded(List<UserModel> usersData) {
+//                if (!usersData.isEmpty()) {
+//                    Log.i("IVANA", "usersData" + usersData);
+//                    usersDataList.addAll(usersData);
+//                    Log.i("IVANA", "usersDataList" + usersDataList);
+//                }
+//            }
+//            @Override
+//            public void onError(String errorMessage) {
+//                Toast.makeText(LogInStudentActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        var userY = usersDataList.stream()
+//                .filter(user -> user.getName().equalsIgnoreCase(name))
+//                .findFirst()
+//                .orElse(null);
+//        return userY != null ? (int)userY.getUserID() : -1;
+//    }
+
 }
