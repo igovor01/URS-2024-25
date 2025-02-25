@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,6 +59,7 @@ public class LogInStudentActivity extends AppCompatActivity {
 
                         if (userId != null) {
                             int userIdInt = userId.intValue();
+                            Toast.makeText(LogInStudentActivity.this, String.valueOf(userId), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LogInStudentActivity.this, NfcCardEmulationActivity.class);
                             intent.putExtra("USER_ID", userIdInt);
                             startActivity(intent);
