@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,22 +18,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.urs_2024_25.Attendance;
 import com.example.urs_2024_25.R;
-import com.example.urs_2024_25.liststudents.ListStudentsActivity;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-public class NFCReaderActivity extends AppCompatActivity implements Attendance.AttendanceCallback {
+public class NFCReaderActivity extends AppCompatActivity {
 
     private static final String TAG = NFCReaderActivity.class.getSimpleName();
     private TextView mTextViewExplanation, mTextViewStatus;
     private MainViewModel viewModel;
     private NfcAdapter nfcAdapter;
-    private Attendance attendance;
     private static final int DEFAULT_CLASS_ID = 1;
 
     //onCreate() → onStart() → onResume() -> first launch
@@ -44,16 +39,11 @@ public class NFCReaderActivity extends AppCompatActivity implements Attendance.A
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
-        setContentView(R.layout.activity_nfc_reader);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        attendance = new Attendance(db, this);
+        setContentView(R.layout.activity_xica_reader);
 
         // Initialize Views and ViewModel
         initViews();
         initViewModel();
-
-        // Initialize the List Students button to be clickable
-        initListStudentsButton();
 
         // Initialize NFC adapter
         initNfcAdapter();
@@ -89,15 +79,6 @@ public class NFCReaderActivity extends AppCompatActivity implements Attendance.A
             Log.e(TAG, "NFC is not supported on this device.");
             mTextViewStatus.setText("NFC not supported");
         }
-    }
-
-    private void initListStudentsButton() {
-        Button buttonListStudents = findViewById(R.id.button_list_students);
-        buttonListStudents.setClickable(true); // Ensure button is clickable
-        buttonListStudents.setOnClickListener(v -> {
-            Log.d(TAG, "Button List Students clicked!");
-            startActivity(new Intent(NFCReaderActivity.this, ListStudentsActivity.class));
-        });
     }
 
     @Override
@@ -198,32 +179,6 @@ public class NFCReaderActivity extends AppCompatActivity implements Attendance.A
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
         //attendance.recordAttendance(DEFAULT_CLASS_ID, (int)tagIdDec);
-    }
-
-    // AttendanceCallback implementation
-    @Override
-    public void onSuccess(String message) {
-        runOnUiThread(() -> {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            // Optionally load and display updated attendance data
-            attendance.loadAttendanceData();
-        });
-    }
-
-    @Override
-    public void onError(String message) {
-        runOnUiThread(() -> {
-            Toast.makeText(this, "Error: " + message, Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "Attendance error: " + message);
-        });
-    }
-
-    @Override
-    public void onDataLoaded(String data) {
-        runOnUiThread(() -> {
-            // You can update a TextView or other UI element to show the attendance data
-            mTextViewExplanation.setText(data);
-        });
     }
 
     private LocalDateTime getCurrentTimestamp() {
