@@ -182,10 +182,7 @@ public class NFCReaderActivity2 extends AppCompatActivity implements Attendance.
 
     @Override
     public void onDataLoaded(String data) {
-        runOnUiThread(() -> {
-            // You can update a TextView or other UI element to show the attendance data
-            mTextViewExplanation.setText(data);
-        });
+
     }
 
 }
