@@ -13,18 +13,14 @@ import java.util.stream.Collectors;
 
 public class Users {
     private static final String COLLECTION_NAME = "Students";
-
     private static final String FIELD_USER_ID = "userID";
     private static final String FIELD_NAME = "name";
-
     private static final String FIELD_SURNAME = "surname";
 
     public interface DataCallback {
         void onDataLoaded(List<UserModel> usersData);
         void onError(String errorMessage);
     }
-
-
 
     //List of users saved in db -> not used
     public void loadUsersFromDb(DataCallback callback) {
@@ -44,7 +40,7 @@ public class Users {
                             // Only add valid users
                             if (userId != null && name != null && surname != null) {
                                 UserModel user = new UserModel();
-                                user.setUserID(userId);
+                                user.setUserID((long)userId);
                                 user.setName(name);
                                 user.setSurname(surname);
                                 usersData.add(user);
